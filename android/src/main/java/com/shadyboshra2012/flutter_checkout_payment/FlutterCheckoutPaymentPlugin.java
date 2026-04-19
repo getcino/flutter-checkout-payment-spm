@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 
-import android.view.View;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
