@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_checkout_payment/flutter_checkout_payment.dart';
 
-import 'Keys.dart';
+import 'checkout_example_config.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> initPaymentSDK() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      bool? isSuccess =
-          await FlutterCheckoutPayment.init(key: "${Keys.TEST_KEY}");
-      //bool isSuccess =  await FlutterCheckoutPayment.init(key: "${Keys.TEST_KEY}", environment: Environment.LIVE);
+      bool? isSuccess = await FlutterCheckoutPayment.init(
+        key: CheckoutExampleConfig.publishableKey,
+      );
       print(isSuccess);
       if (mounted) setState(() => _isInit = "true");
     } on PlatformException {
@@ -86,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     cardHolderName: cardNameHolder,
                     cvvCode: cvv,
                     onCreditCardModelChange: _onModelChange,
-                    themeColor: ThemeData.light().primaryColor,
                     formKey: formKey,
                   ),
                 ),
@@ -155,8 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
         context: this.context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return WillPopScope(
-              onWillPop: () => Future<bool>.value(false),
+          return PopScope(
+              canPop: false,
               child: AlertDialog(
                 title: Text("Loading..."),
                 content: Column(
@@ -229,8 +228,8 @@ class _HomeScreenState extends State<HomeScreen> {
         context: this.context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return WillPopScope(
-              onWillPop: () => Future<bool>.value(false),
+          return PopScope(
+              canPop: false,
               child: AlertDialog(
                 title: Text("Loading..."),
                 content: Column(
@@ -314,8 +313,8 @@ class _HomeScreenState extends State<HomeScreen> {
         context: this.context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return WillPopScope(
-              onWillPop: () => Future<bool>.value(false),
+          return PopScope(
+              canPop: false,
               child: AlertDialog(
                 title: Text("Loading..."),
                 content: Column(
@@ -380,8 +379,8 @@ class _HomeScreenState extends State<HomeScreen> {
         context: this.context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return WillPopScope(
-              onWillPop: () => Future<bool>.value(false),
+          return PopScope(
+              canPop: false,
               child: AlertDialog(
                 title: Text("Loading..."),
                 content: Column(
