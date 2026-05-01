@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import Frames
+import Checkout
 
 public class SwiftFlutterCheckoutPaymentPlugin: NSObject, FlutterPlugin {
     
@@ -79,7 +80,7 @@ public class SwiftFlutterCheckoutPaymentPlugin: NSObject, FlutterPlugin {
         // Init card without billing address / phone number
         // if not found and generate token.
         guard let billingModelDictionary = args!["billingModel"] as? [String: Any], let phoneModelDictionary = billingModelDictionary["phoneModel"] as? [String: Any] else {
-            let card = Card(number: cardNumber, expiryDate: ExpiryDate(month: expiryMonthInt, year: expiryYearInt), name: name, cvv: cvv, billingAddress: nil, phone: nil)
+            let card = Card(number: cardNumber, expiryDate: Checkout.ExpiryDate(month: expiryMonthInt, year: expiryYearInt), name: name, cvv: cvv, billingAddress: nil, phone: nil)
             
             // create the card token request
             checkoutAPIClient.createToken(.card(card)) { createTokenResult in
@@ -115,7 +116,7 @@ public class SwiftFlutterCheckoutPaymentPlugin: NSObject, FlutterPlugin {
         let billingModel = Frames.Address(addressLine1: addressLine1, addressLine2: addressLine2, city: city, state: state, zip: zip, country: Country(iso3166Alpha2: country))
         
         // create the card token request and generate the token.
-        let card = Card(number: cardNumber, expiryDate: ExpiryDate(month: expiryMonthInt, year: expiryYearInt), name: name, cvv: cvv, billingAddress: billingModel, phone: phoneModel)
+        let card = Card(number: cardNumber, expiryDate: Checkout.ExpiryDate(month: expiryMonthInt, year: expiryYearInt), name: name, cvv: cvv, billingAddress: billingModel, phone: phoneModel)
         
         // create the card token request
         checkoutAPIClient.createToken(.card(card), completion: { [self] createTokenResult in
@@ -161,12 +162,9 @@ public class SwiftFlutterCheckoutPaymentPlugin: NSObject, FlutterPlugin {
         
         let cardNumber : String = args!["number"] as! String
         
-        var checkoutEnv: Frames.Environment = .sandbox
-        if (environment == .live) {
-            checkoutEnv = .production
-        }
-        /// verify card number
-        let cardValidator = CardValidator(environment: checkoutEnv)
+        /// verify card number (Checkout.Environment — Frames.checkoutEnvironment is internal)
+        let checkoutEnv: Checkout.Environment = (environment == .live) ? .production : .sandbox
+        let cardValidator = Checkout.CardValidator(environment: checkoutEnv)
         let isCardValid = cardValidator.validate(cardNumber: cardNumber)
         switch isCardValid {
         case .success:
